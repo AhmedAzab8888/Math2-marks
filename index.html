@@ -25,16 +25,26 @@
             margin-bottom: 30px;
         }
         .search-box {
-            display: flex;
-            gap: 10px;
             margin-bottom: 20px;
         }
+        .input-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .input-example {
+            font-size: 12px;
+            color: #888;
+            margin-top: 3px;
+        }
         input[type="text"] {
-            flex: 1;
+            width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
+            box-sizing: border-box;
         }
         button {
             background-color: #3498db;
@@ -45,6 +55,7 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #2980b9;
@@ -94,7 +105,8 @@
         <h1>Math2 Marks System</h1>
         
         <div class="search-box">
-            <input type="text" id="nationalId" placeholder="Enter National ID">
+            <label class="input-label">Enter Your National ID:</label>
+            <input type="text" id="nationalId" placeholder="e.g. 30505091700459">
             <button onclick="searchStudent()">Search</button>
         </div>
         
@@ -145,7 +157,7 @@
                 errorElement.style.display = 'none';
                 
                 // Load the Excel file
-                const response = await fetch('math2.xlsx'); // Changed to math2.xlsx
+                const response = await fetch('math2.xlsx');
                 if (!response.ok) throw new Error("Failed to load marks file");
                 
                 const fileData = await response.arrayBuffer();
@@ -186,7 +198,7 @@
             );
             
             if (!student) {
-                showError('Student with this National ID does not exist in Math2 records');
+                showError('Student with this National ID does not exist');
                 return;
             }
             
@@ -199,12 +211,12 @@
             const quiz1Cell = document.getElementById('quiz1');
             const midtermCell = document.getElementById('midterm');
             
-            quiz1Cell.textContent = student['Quiz1'] === "" ? "Absent" : student['Quiz1'];
-            midtermCell.textContent = student['Mid'] === "" ? "Absent" : student['Mid'];
+            quiz1Cell.textContent = student['Quiz1'] === "" || student['Quiz1'] === undefined ? "You were absent" : student['Quiz1'];
+            midtermCell.textContent = student['Mid'] === "" || student['Mid'] === undefined ? "You were absent" : student['Mid'];
             
             // Style absent marks
-            quiz1Cell.className = student['Quiz1'] === "" ? "absent" : "";
-            midtermCell.className = student['Mid'] === "" ? "absent" : "";
+            quiz1Cell.className = (student['Quiz1'] === "" || student['Quiz1'] === undefined) ? "absent" : "";
+            midtermCell.className = (student['Mid'] === "" || student['Mid'] === undefined) ? "absent" : "";
             
             resultDiv.style.display = 'block';
         }
